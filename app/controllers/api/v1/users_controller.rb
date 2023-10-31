@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
      include JwtAuthenticator
-   before_action :jwt_authenticate, except: [:create, :update]
+   before_action :jwt_authenticate, except: [:create,:show,:update]
 
     def create
         user=User.new(user_params)
@@ -16,20 +16,29 @@ class Api::V1::UsersController < ApplicationController
           p"==================="
           token = encode(user.id)
           render json: {status: 201, data: {name: user.name, email: user.email, token: token}}
-       else
-         "error for user"
-         p user.errors.full_messages
-         render json: {status: 400,error: "users can't save and create"}
-       end
+        else
+          p"error for user"
+          p user.errors.full_messages
+          render json: {status: 400,error: "users can't save and create"}
+        end
+    end
+    def show 
+        if user=User.find_by(id: params[:id])
+            #確認完了
+          render json: {status: 201, data: {name: user.name, email: user.email,token: token}}
+        else
+          render json: {status: 400,error: "users can't save and create"}
+        end
     end
     def update
-      if user=User.find_by(id:params[:id])
+      if user=User.find_by(id: params[:id])
         p"==============save====="
         p params
         p"==================="
         user.update(user_params)
         user.save
-        render json: {status: 201, data: user}
+         token = encode(user.id)
+        render json: {status: 201, data: {name: user.name, email: user.email,token: token}}
       else
         render json: {status: 400,error: "users can't update"}
       end
