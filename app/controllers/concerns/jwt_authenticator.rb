@@ -1,7 +1,6 @@
 module JwtAuthenticator
     require 'jwt'
     require 'dotenv/load'
-    #暗号化する
     def encode(user_id)
         expires_in = 1.day.from_now.to_i
         payload = {user_id: user_id, exp: expires_in}

@@ -3,7 +3,6 @@ class Api::V1::AuthenticationController < ActionController::Base
   include JwtAuthenticator
   def create
     user = User.find_by(email: params[:email])
-
     if user&.authenticate(params[:password])
       token = encode(user.id)
       render json: {status: 201, data: {name: user.name, email: user.email, token: token} }

@@ -76,7 +76,7 @@ class Api::V1::UsersController < ApplicationController
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
      end
      def current_user
- 　　　　 user_id = decode(params[:token])  # Replace `decode` with the appropriate method for decoding the token
- 　　　　 User.find(user_id)
+ 　　 user_id = decode(token)
+      User.find_by(id: user_id)
 　　 end
 end
